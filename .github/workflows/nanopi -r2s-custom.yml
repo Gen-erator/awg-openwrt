@@ -1,16 +1,27 @@
-name: NanoPi R2S Plus AmneziaWG_2 Build
+name: NanoPi-Build-Custom
 
 on:
-  workflow_dispatch: # Позволяет запустить сборку кнопкой
+  workflow_dispatch:
 
 jobs:
   build:
-    name: Build Custom Kernel Module
-    # Используем готовый сценарий Славы, передавая ему ваши параметры
-    uses: Slava-Shchipunov/amneziawg-openwrt/.github/workflows/build-module.yml@master
-    with:
-      tag: '24.10.2'
-      pkgarch: 'aarch64_generic'
-      target: 'rockchip'
-      subtarget: 'armv8'
-      vermagic: '6.6.84+ SMP mod_unload modversions aarch64'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build AmneziaWG
+        # Используем официальный экшен Славы для сборки
+        uses: Slava-Shchipunov/amneziawg-openwrt@master
+        with:
+          tag: '24.10.2'
+          pkgarch: 'aarch64_generic'
+          target: 'rockchip'
+          subtarget: 'armv8'
+          vermagic: '6.6.84+ SMP mod_unload modversions aarch64'
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: amneziawg-nanopi-r2s
+          path: awgrelease/*.ipk
