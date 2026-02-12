@@ -156,6 +156,10 @@ jobs:
           echo "CONFIG_PACKAGE_luci-i18n-amneziawg-ru=y" >> .config
           
           make defconfig
+          # 1. Принудительно меняем версию ядра в конфиге на вашу
+          sed -i 's/v[0-9]\.[0-9]\.[0-9]*/6.6.84+/g' .config
+          # 2. Записываем ваш уникальный хеш vermagic
+          echo "6.6.84+ SMP mod_unload modversions aarch64" > ver_magic
 
       - name: Build AmneziaWG packages
         run: |
